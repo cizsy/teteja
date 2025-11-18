@@ -22,13 +22,12 @@ body {
     font-family: 'Poppins', sans-serif;
     background: linear-gradient(135deg, var(--light-blue) 0%, var(--primary-blue) 100%);
     color: var(--dark-text);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    /* justify-content: flex-start;  Konten mulai dari atas di mobile */
     margin: 0;
-    padding: 0; /* Hapus padding body di mobile */
-    min-height: 100vh;
+    padding: 0; /* Hapus padding body */
+    /* Perbaikan "Gak Ngescroll": Kunci body ke tinggi viewport */
+    height: 100vh; /* Fallback */
+    height: 100svh; /* Gunakan Small Viewport Height untuk HP */
+    overflow: hidden; /* Cegah body scrolling */
 }
 
 /* Utilitas */
@@ -36,58 +35,60 @@ body {
     display: none !important;
 }
 
-/* CONTAINER UMUM (Awalnya untuk Ponsel: Full Width, Tanpa Bayangan/Margin Besar) */
+/* CONTAINER UMUM (Mobile-first) */
 .screen-container {
     background-color: var(--white-bg);
     padding: 20px;
-    border-radius: 0; /* Hapus radius di mobile (full screen edge) */
-    box-shadow: none; /* Hapus bayangan di mobile */
-    max-width: 100%; /* Selalu 100% lebar di mobile */
+    border-radius: 0; 
+    box-shadow: none; 
     width: 100%; 
     text-align: center;
-    box-sizing: border-box; /* Pastikan padding tidak menambah lebar */
+    box-sizing: border-box; /* Sangat penting untuk padding */
     margin-top: 0; 
-    min-height: 100vh; /* Pastikan container mengisi layar di HP */
+    /* Perbaikan "Gak Ngescroll": Container mengisi 100% body */
+    height: 100%;
+    /* Izinkan scrolling DI DALAM container jika konten terlalu panjang (misal: game) */
+    overflow-y: auto; 
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: center; /* Konten di tengah secara vertikal */
 }
 
 /* --- MEDIA QUERY: LAYAR BESAR (PC/LAPTOP) --- */
-/* Terapkan container yang lebih kecil, terpusat, dengan margin, dan bayangan */
 @media (min-width: 768px) {
     body {
-        /* Kembali ke justify-content: center agar konten di tengah vertikal */
         justify-content: center;
         padding: 20px; /* Beri padding lagi untuk body di PC */
+        height: auto; /* Kembalikan ke auto */
+        min-height: 100vh;
+        overflow: auto; /* Izinkan body scroll di PC */
     }
 
     .screen-container {
-        /* Style PC/Laptop: */
-        max-width: 550px; /* Batasi lebar container */
+        max-width: 550px; 
         width: 90%; 
-        border-radius: 20px; /* Tambahkan kembali sudut melengkung */
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Tambahkan kembali bayangan */
+        border-radius: 20px; 
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); 
         margin-top: 0; 
-        min-height: auto; /* Tidak perlu mengisi layar penuh di PC */
+        height: auto; /* Tinggi otomatis di PC */
+        min-height: auto;
+        overflow-y: visible; /* Tidak perlu internal scroll di PC */
         justify-content: flex-start;
     }
 }
 
 
 /* --- 1. INTRO SCREEN STYLE --- */
-/* Intro harus selalu full screen, jadi tidak perlu media query */
 #intro-container {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
-    
+    height: 100vh; /* Selalu full screen */
+    height: 100svh;
     background-color: var(--intro-bg-blue);
     background-image: radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 40%),
                       radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 30%);
-    
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -95,8 +96,8 @@ body {
     color: var(--intro-text-color);
     box-shadow: none;
     z-index: 100;
-    padding: 20px; /* Pastikan ada padding di intro */
-    min-height: 100vh; /* Pastikan intro mengisi layar */
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 #intro-title {
@@ -109,9 +110,10 @@ body {
     animation: fadeIn 1s ease-in forwards;
     animation-delay: 0.5s;
     margin-bottom: 50px;
+    /* Perbaikan 1: Pastikan text-align center */
     text-align: center;
+    width: 100%;
 }
-/* Font title kecil di Mobile */
 @media (max-width: 480px) {
     #intro-title {
         font-size: 3.5em; 
@@ -161,25 +163,11 @@ body {
     text-align: left;
     color: var(--dark-text);
 }
+/* ... (style .rules-box tetap sama) ... */
+.rules-box ul { list-style: none; padding: 0; }
+.rules-box li { margin-bottom: 10px; position: relative; padding-left: 25px; font-size: 0.9em; }
+.rules-box li::before { content: "💡"; position: absolute; left: 0; color: var(--bright-red); }
 
-.rules-box ul {
-    list-style: none;
-    padding: 0;
-}
-
-.rules-box li {
-    margin-bottom: 10px;
-    position: relative;
-    padding-left: 25px;
-    font-size: 0.9em;
-}
-
-.rules-box li::before {
-    content: "💡";
-    position: absolute;
-    left: 0;
-    color: var(--bright-red);
-}
 
 /* Style Tombol Lanjut/Mulai */
 #next-to-rules-button, #start-setup-button, #start-game-button {
@@ -194,33 +182,13 @@ body {
     margin-top: 15px;
     transition: background-color 0.3s;
 }
+#next-to-rules-button:hover, #start-setup-button:hover, #start-game-button:hover { background-color: #c9303c; }
 
-#next-to-rules-button:hover, #start-setup-button:hover, #start-game-button:hover {
-    background-color: #c9303c;
-}
 
 /* --- 4. SETUP GAME STYLE --- */
-#setup-container h2 {
-    color: var(--primary-blue);
-    font-size: 1.5em;
-    margin-bottom: 25px;
-}
-
-.setting-group {
-    margin: 15px 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px; 
-}
-
-.setting-group label {
-    font-weight: 600;
-    color: var(--dark-text);
-    font-size: 0.9em;
-    text-align: center;
-}
-
+#setup-container h2 { color: var(--primary-blue); font-size: 1.5em; margin-bottom: 25px; }
+.setting-group { margin: 15px 0; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.setting-group label { font-weight: 600; color: var(--dark-text); font-size: 0.9em; text-align: center; }
 #category-select,
 #num-questions {
     padding: 10px 15px;
@@ -236,13 +204,8 @@ body {
     transition: border-color 0.2s;
     text-align: center;
 }
-
 #category-select:focus,
-#num-questions:focus {
-    border-color: var(--bright-red);
-    outline: none;
-}
-/* Tambahkan ikon kecil pada select untuk estetika */
+#num-questions:focus { border-color: var(--bright-red); outline: none; }
 #category-select {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%23457b9d' d='M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
@@ -252,12 +215,12 @@ body {
 
 
 /* --- 5. GAME UTAMA (MAIN) STYLE --- */
-
-/* Style game-container sudah di-handle oleh .screen-container */
 #game-container {
-    /* Style spesifik game bisa ditambahkan di sini jika perlu */
+    /* Perbaikan "Gak Ngescroll": Buat game-container bisa scroll internal jika perlu */
+    justify-content: flex-start; /* Mulai dari atas */
 }
 
+/* ... (style #info-area, #hint-wrapper, #scrambled-letters-area, dll. tetap sama) ... */
 #info-area h2 {color: #007bff;}
 #hint-wrapper {display: flex; flex-direction: column; align-items: center;}
 #show-hint-button {padding: 10px 20px; background-color: var(--accent-orange); color: var(--dark-text); border: none; border-radius: 8px; cursor: pointer; font-weight: 700; transition: background-color 0.3s; margin-top: 15px;}
@@ -266,23 +229,62 @@ body {
 #hint-display {background-color: #ffe8d6; border-left: 5px solid #ff7f50; padding: 10px; border-radius: 5px; font-style: italic; font-size: 0.9em; margin-top: 10px; width: 80%;}
 #scrambled-letters-area {margin: 30px 0; font-size: 2.5em; padding: 15px; border: 3px dashed var(--primary-blue); border-radius: 10px; background-color: var(--light-blue); color: var(--dark-text); font-weight: 700; letter-spacing: 7px; box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);}
 #guess-area {display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;}
-
-#user-guess {
-    padding: 12px; 
-    border: 2px solid var(--primary-blue); 
-    border-radius: 8px; 
-    flex-grow: 1; 
-    font-size: 1.2em; 
-    text-align: center; 
-    max-width: 65%;
-    /* Hapus cursor: default agar bisa diketik */
-}
-
+#user-guess { padding: 12px; border: 2px solid var(--primary-blue); border-radius: 8px; flex-grow: 1; font-size: 1.2em; text-align: center; max-width: 65%; }
 #submit-button {padding: 12px 25px; background-color: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1em; font-weight: 700; transition: background-color 0.3s, transform 0.1s;}
 #submit-button:hover {background-color: #218838; transform: translateY(-2px);}
 #message-area {margin-top: 10px; padding: 10px; font-size: 1.2em; font-weight: 700; border-radius: 5px; min-height: 40px;}
-#keyboard-container {margin-top: 15px; display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; user-select: none;}
-.key-button {padding: 10px 15px; background-color: var(--dark-text); color: var(--white-bg); border: none; border-radius: 4px; cursor: pointer; font-size: 1em; font-weight: 600; transition: background-color 0.1s; min-width: 40px; text-align: center;}
-.key-button:hover {background-color: var(--primary-blue);}
-.key-button.function-key {background-color: var(--bright-red); padding: 10px;}
-.key-button.function-key:hover {background-color: #c9303c;}
+
+
+/* --- Perbaikan 2: Keyboard QWERTY & Ukuran --- */
+#keyboard-container {
+    margin-top: 15px; 
+    display: flex; 
+    flex-direction: column; /* Tumpuk baris keyboard */
+    align-items: center; /* Pusatkan baris keyboard */
+    gap: 5px; 
+    user-select: none;
+    padding: 0 5px; /* Beri sedikit padding di sisi keyboard */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Baris QWERTY (BARU) */
+.keyboard-row {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    width: 100%; /* Baris mengambil lebar penuh */
+}
+
+.key-button {
+    background-color: var(--dark-text);
+    color: var(--white-bg);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background-color 0.1s;
+    
+    /* Perbaikan 2: Ukuran tombol lebih besar */
+    font-size: 1.1em; /* Font lebih besar */
+    padding: 15px 0; /* Tombol lebih TINGGI */
+    
+    /* Biarkan flexbox mengatur lebar tombol */
+    flex-grow: 1; 
+    flex-basis: 0; /* Mulai dari 0 */
+    min-width: 0; /* Biarkan tombol menyusut */
+}
+
+.key-button:hover {
+    background-color: var(--primary-blue);
+}
+
+.key-button.function-key {
+    background-color: var(--bright-red);
+    /* Buat tombol HAPUS sedikit lebih lebar */
+    flex-grow: 2; 
+}
+
+.key-button.function-key:hover {
+    background-color: #c9303c;
+}
