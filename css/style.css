@@ -1,191 +1,288 @@
 /* Import font cerah dari Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;900&display=swap');
 
-/* Peningkatan ukuran dasar font untuk pembacaan yang lebih baik */
+/* Definisikan Warna dan Ukuran Dasar */
 :root {
-    font-size: 18px; /* Ukuran dasar yang lebih besar */
+    font-size: 18px; 
+    --primary-blue: #457b9d; 
+    --light-blue: #a8dadc; 
+    --dark-text: #1d3557; 
+    --bright-red: #e63946; 
+    --white-bg: #f1faee;
+    --accent-orange: #ff9f1c;
+
+    /* Warna KHUSUS UNTUK INTRO SCREEN (Desain Gambar User) */
+    --intro-bg-blue: #46718a; 
+    --intro-text-color: #ffffff;
+    --progress-bar-color: #e63946;
 }
 
-/* Reset dan Background */
+/* BASE STYLING (DEFAULT: MOBILE / FULL SCREEN) */
 body {
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #a8dadc 0%, #457b9d 100%);
-    color: #1d3557;
+    background: linear-gradient(135deg, var(--light-blue) 0%, var(--primary-blue) 100%);
+    color: var(--dark-text);
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; /* Tambahkan ini untuk memposisikan konten di tengah vertikal */
+    /* justify-content: flex-start;  Konten mulai dari atas di mobile */
     margin: 0;
-    padding: 20px 10px;
+    padding: 0; /* Hapus padding body di mobile */
     min-height: 100vh;
 }
 
-/* Container Utama */
-#game-container {
-    background-color: #f1faee;
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-    max-width: 550px; /* Lebar lebih besar */
-    width: 90%;
-    /* Pastikan semua konten di dalamnya rata tengah */
-    text-align: center; 
+/* Utilitas */
+.hidden {
+    display: none !important;
 }
 
-/* Header */
-header h1 {
-    color: #e63946;
-    font-size: 2em; /* Font lebih besar */
-    margin-bottom: 0;
-}
-
-header p {
-    color: #1d3557;
-    margin-top: 5px;
-    font-weight: 600;
-    font-size: 0.9em;
-}
-
-/* Area Informasi (Round dan Hint) */
-#info-area h2 {
-    color: #007bff;
-    margin-bottom: 5px;
-}
-
-/* Tata Letak untuk Tombol dan Hint */
-#hint-wrapper {
-    margin-top: 15px;
+/* CONTAINER UMUM (Awalnya untuk Ponsel: Full Width, Tanpa Bayangan/Margin Besar) */
+.screen-container {
+    background-color: var(--white-bg);
+    padding: 20px;
+    border-radius: 0; /* Hapus radius di mobile (full screen edge) */
+    box-shadow: none; /* Hapus bayangan di mobile */
+    max-width: 100%; /* Selalu 100% lebar di mobile */
+    width: 100%; 
+    text-align: center;
+    box-sizing: border-box; /* Pastikan padding tidak menambah lebar */
+    margin-top: 0; 
+    min-height: 100vh; /* Pastikan container mengisi layar di HP */
     display: flex;
     flex-direction: column;
-    align-items: center; /* Penting: Memastikan elemen di dalamnya berada di tengah */
-}
-
-/* Style untuk tombol show-hint */
-#show-hint-button {
-    padding: 10px 20px;
-    background-color: #ff9f1c;
-    color: #1d3557; 
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 700;
-    transition: background-color 0.3s;
-}
-
-#show-hint-button:hover {
-    background-color: #e67e22;
-}
-
-/* Kelas untuk menyembunyikan elemen */
-.hidden-hint {
-    display: none !important; /* Gunakan !important untuk memastikan tersembunyi */
-}
-
-/* Style hint agar tetap cantik saat muncul */
-#hint-display {
-    background-color: #ffe8d6;
-    border-left: 5px solid #ff7f50;
-    padding: 10px;
-    border-radius: 5px;
-    font-style: italic;
-    font-size: 0.9em;
-    margin-top: 10px;
-    width: 80%; /* Batasi lebar hint agar tidak terlalu panjang */
-}
-
-/* Area Huruf Acak */
-#scrambled-letters-area {
-    margin: 30px 0;
-    font-size: 2.5em; /* Ukuran huruf lebih besar */
-    padding: 15px;
-    border: 3px dashed #457b9d;
-    border-radius: 10px;
-    background-color: #a8dadc;
-    color: #1d3557;
-    font-weight: 700;
-    letter-spacing: 7px; /* Jarak antar huruf diperlebar */
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Input dan Tombol Tebak */
-#guess-area {
-    display: flex;
     justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
 }
 
-#user-guess {
-    padding: 12px;
-    border: 2px solid #457b9d;
-    border-radius: 8px;
-    flex-grow: 1;
-    font-size: 1.2em; /* Font input lebih besar */
+/* --- MEDIA QUERY: LAYAR BESAR (PC/LAPTOP) --- */
+/* Terapkan container yang lebih kecil, terpusat, dengan margin, dan bayangan */
+@media (min-width: 768px) {
+    body {
+        /* Kembali ke justify-content: center agar konten di tengah vertikal */
+        justify-content: center;
+        padding: 20px; /* Beri padding lagi untuk body di PC */
+    }
+
+    .screen-container {
+        /* Style PC/Laptop: */
+        max-width: 550px; /* Batasi lebar container */
+        width: 90%; 
+        border-radius: 20px; /* Tambahkan kembali sudut melengkung */
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Tambahkan kembali bayangan */
+        margin-top: 0; 
+        min-height: auto; /* Tidak perlu mengisi layar penuh di PC */
+        justify-content: flex-start;
+    }
+}
+
+
+/* --- 1. INTRO SCREEN STYLE --- */
+/* Intro harus selalu full screen, jadi tidak perlu media query */
+#intro-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    background-color: var(--intro-bg-blue);
+    background-image: radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 40%),
+                      radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 30%);
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--intro-text-color);
+    box-shadow: none;
+    z-index: 100;
+    padding: 20px; /* Pastikan ada padding di intro */
+    min-height: 100vh; /* Pastikan intro mengisi layar */
+}
+
+#intro-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 5em; 
+    font-weight: 900; 
+    color: var(--intro-text-color);
+    text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+    opacity: 0;
+    animation: fadeIn 1s ease-in forwards;
+    animation-delay: 0.5s;
+    margin-bottom: 50px;
     text-align: center;
-    max-width: 65%;
-    cursor: default; /* Karena readonly */
+}
+/* Font title kecil di Mobile */
+@media (max-width: 480px) {
+    #intro-title {
+        font-size: 3.5em; 
+    }
 }
 
-#submit-button {
-    padding: 12px 25px;
-    background-color: #28a745;
-    color: white;
+/* Progress Bar */
+.loading-symbol {
+    width: 80%; 
+    max-width: 400px;
+    height: 20px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    margin: 20px auto;
+    overflow: hidden;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%; 
+    background-color: var(--progress-bar-color); 
+    transition: width 7s linear; 
+    border-radius: 10px;
+}
+
+#intro-container p {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: var(--intro-text-color);
+    margin-top: 5px;
+}
+
+/* --- Animasi --- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- 2. DESKRIPSI & PETUNJUK BOX STYLE --- */
+.description-box {
+    background-color: var(--light-blue);
+    border: 2px solid var(--primary-blue);
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 10px;
+    text-align: left;
+    color: var(--dark-text);
+}
+
+.rules-box ul {
+    list-style: none;
+    padding: 0;
+}
+
+.rules-box li {
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: 25px;
+    font-size: 0.9em;
+}
+
+.rules-box li::before {
+    content: "💡";
+    position: absolute;
+    left: 0;
+    color: var(--bright-red);
+}
+
+/* Style Tombol Lanjut/Mulai */
+#next-to-rules-button, #start-setup-button, #start-game-button {
+    padding: 12px 30px;
+    background-color: var(--bright-red);
+    color: var(--white-bg);
     border: none;
     border-radius: 8px;
     cursor: pointer;
     font-size: 1.1em;
     font-weight: 700;
-    transition: background-color 0.3s, transform 0.1s;
+    margin-top: 15px;
+    transition: background-color 0.3s;
 }
 
-#submit-button:hover {
-    background-color: #218838;
-    transform: translateY(-2px);
+#next-to-rules-button:hover, #start-setup-button:hover, #start-game-button:hover {
+    background-color: #c9303c;
 }
 
-/* Area Pesan */
-#message-area {
-    margin-top: 10px;
-    padding: 10px;
-    font-size: 1.2em;
-    font-weight: 700;
-    border-radius: 5px;
-    min-height: 40px; /* Menjaga agar elemen tidak bergeser */
+/* --- 4. SETUP GAME STYLE --- */
+#setup-container h2 {
+    color: var(--primary-blue);
+    font-size: 1.5em;
+    margin-bottom: 25px;
 }
 
-/* --- Style Keyboard Virtual BARU --- */
-#keyboard-container {
-    margin-top: 20px;
+.setting-group {
+    margin: 15px 0;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 5px;
-    user-select: none; /* Mencegah seleksi teks saat menekan tombol */
+    flex-direction: column;
+    align-items: center;
+    gap: 8px; 
 }
 
-.key-button {
-    padding: 10px 15px;
-    background-color: #1d3557; /* Warna tombol biru gelap */
-    color: #f1faee;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1em;
+.setting-group label {
     font-weight: 600;
-    transition: background-color 0.1s;
-    min-width: 40px;
+    color: var(--dark-text);
+    font-size: 0.9em;
     text-align: center;
 }
 
-.key-button:hover {
-    background-color: #457b9d;
+#category-select,
+#num-questions {
+    padding: 10px 15px;
+    border: 2px solid var(--primary-blue);
+    border-radius: 8px;
+    font-size: 1em;
+    width: 80%;
+    max-width: 300px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+    appearance: none;
+    background-color: var(--white-bg);
+    cursor: pointer;
+    transition: border-color 0.2s;
+    text-align: center;
 }
 
-.key-button.function-key {
-    background-color: #e63946; /* Warna khusus untuk tombol fungsi (Hapus) */
-    padding: 10px;
+#category-select:focus,
+#num-questions:focus {
+    border-color: var(--bright-red);
+    outline: none;
+}
+/* Tambahkan ikon kecil pada select untuk estetika */
+#category-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%23457b9d' d='M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 30px;
 }
 
-.key-button.function-key:hover {
-    background-color: #c9303c;
+
+/* --- 5. GAME UTAMA (MAIN) STYLE --- */
+
+/* Style game-container sudah di-handle oleh .screen-container */
+#game-container {
+    /* Style spesifik game bisa ditambahkan di sini jika perlu */
 }
+
+#info-area h2 {color: #007bff;}
+#hint-wrapper {display: flex; flex-direction: column; align-items: center;}
+#show-hint-button {padding: 10px 20px; background-color: var(--accent-orange); color: var(--dark-text); border: none; border-radius: 8px; cursor: pointer; font-weight: 700; transition: background-color 0.3s; margin-top: 15px;}
+#show-hint-button:hover {background-color: #e67e22;}
+.hidden-hint {display: none !important; padding: 10px;}
+#hint-display {background-color: #ffe8d6; border-left: 5px solid #ff7f50; padding: 10px; border-radius: 5px; font-style: italic; font-size: 0.9em; margin-top: 10px; width: 80%;}
+#scrambled-letters-area {margin: 30px 0; font-size: 2.5em; padding: 15px; border: 3px dashed var(--primary-blue); border-radius: 10px; background-color: var(--light-blue); color: var(--dark-text); font-weight: 700; letter-spacing: 7px; box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);}
+#guess-area {display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;}
+
+#user-guess {
+    padding: 12px; 
+    border: 2px solid var(--primary-blue); 
+    border-radius: 8px; 
+    flex-grow: 1; 
+    font-size: 1.2em; 
+    text-align: center; 
+    max-width: 65%;
+    /* Hapus cursor: default agar bisa diketik */
+}
+
+#submit-button {padding: 12px 25px; background-color: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1em; font-weight: 700; transition: background-color 0.3s, transform 0.1s;}
+#submit-button:hover {background-color: #218838; transform: translateY(-2px);}
+#message-area {margin-top: 10px; padding: 10px; font-size: 1.2em; font-weight: 700; border-radius: 5px; min-height: 40px;}
+#keyboard-container {margin-top: 15px; display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; user-select: none;}
+.key-button {padding: 10px 15px; background-color: var(--dark-text); color: var(--white-bg); border: none; border-radius: 4px; cursor: pointer; font-size: 1em; font-weight: 600; transition: background-color 0.1s; min-width: 40px; text-align: center;}
+.key-button:hover {background-color: var(--primary-blue);}
+.key-button.function-key {background-color: var(--bright-red); padding: 10px;}
+.key-button.function-key:hover {background-color: #c9303c;}

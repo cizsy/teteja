@@ -3,37 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tembang tembung jawa </title>
+    <title>Teteja - Krama Alus Wordle</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <header>
-        <h1>Basa Krama Inggil</h1>
-        <p>Tembang Tembung Jawa Krama Inggil saking aksara ingkang dipuncampur</p>
-    </header>
 
-    <main id="game-container">
-        <div id="info-area">
-        <h2 id="round-display">Putaran ke-1</h2> <div id="hint-wrapper">
-            <button id="show-hint-button">❓ Tampilkan Petunjuk Bahasa Indonesia</button>
-            <p id="hint-display" class="hidden-hint"></p> </div>
+    <!-- ########################################## -->
+    <!-- 1. HALAMAN INTRO (LOADING) -->
+    <!-- ########################################## -->
+    <div id="intro-container">
+        <h1 id="intro-title">TETEJA</h1>
+        
+        <!-- Ilustrasi Karakter Jawa (Placeholder: Hanya menambah jarak) -->
+        <div id="jawa-characters" style="height: 150px; margin: 20px 0;"></div>
+        
+        <div class="loading-symbol">
+            <div class="progress-fill" id="progress-bar"></div>
+        </div>
+        <p>Loading...</p>
     </div>
 
-        <div id="scrambled-letters-area">
+    <!-- ########################################## -->
+    <!-- 2. HALAMAN DESKRIPSI -->
+    <!-- ########################################## -->
+    <div id="description-container" class="screen-container hidden">
+        <h1>Apa itu TETEJA?</h1>
+        <div class="description-box">
+            <p>
+                Teteja adalah game edukasi yang bertujuan untuk memperluas kosakata Bahasa Jawa Krama Inggil kepada pemainnya. di Teteja kamu dapat memilih berapa banyak kosa kata yang ingin kamu latih. Game ini dibuat dikarenakan banyak anak-anak yang kurang mengenal bahasa Krama Inggil, Game ini bertujuan untuk membantu pemain memperluas kosakata Krama Inggil.
+            </p>
+        </div>
+        <button id="next-to-rules-button">Lanjut</button>
+    </div>
+
+    <!-- ########################################## -->
+    <!-- 3. HALAMAN PETUNJUK BERMAIN -->
+    <!-- ########################################## -->
+    <div id="rules-container" class="screen-container hidden">
+        <h1>Petunjuk Bermain</h1>
+        <div class="description-box rules-box">
+            <ul>
+                <li>Pilih kategori dan jumlah pertanyaan yang kamu inginkan.</li>
+                <li>Susun kata Krama Alus dari huruf yang teracak di layar.</li>
+                <li>Gunakan keyboard virtual untuk memasukkan tebakanmu.</li>
+                <li>Jika kesulitan, gunakan tombol <strong>Petunjuk</strong> untuk melihat arti kata dalam Bahasa Indonesia.</li>
+                <li>Jawab semua putaran untuk menyelesaikan permainan!</li>
+            </ul>
+        </div>
+        <button id="start-setup-button">Mulai Game</button>
+    </div>
+    
+    <!-- ########################################## -->
+    <!-- 4. HALAMAN SETUP GAME -->
+    <!-- ########################################## -->
+    <div id="setup-container" class="screen-container hidden">
+        <h2>Atur Permainan</h2>
+        
+        <div class="setting-group">
+            <label for="category-select">Pilih Jenis Kosakata:</label>
+            <select id="category-select">
+                <option value="madya">Krama Alus Madya</option>
+                <option value="inggil">Krama Alus Inggil</option>
+            </select>
+        </div>
+
+        <div class="setting-group">
+            <label for="num-questions">Jumlah Pertanyaan (Kelipatan 5):</label>
+            <input type="number" id="num-questions" value="10" min="5" step="5">
+        </div>
+
+        <button id="start-game-button">Mulai Permainan</button>
+    </div>
+
+    <!-- ########################################## -->
+    <!-- 5. HALAMAN GAME UTAMA -->
+    <!-- ########################################## -->
+    <main id="game-container" class="screen-container hidden"> 
+        <header>
+            <h1>TETEJA</h1>
+            <p>Tembang Tembung Jawa Krama Inggil saking Aksara ingkang Dipuncampur</p>
+        </header>
+
+        <!-- Area Game: Info, Scrambled Letters, Input, Keyboard -->
+        <div id="info-area">
+            <h2 id="round-display">Putaran ke-1</h2>
+
+            <div id="hint-wrapper">
+                <button id="show-hint-button">❓ Tampilkan Petunjuk Bahasa Indonesia</button>
+                <p id="hint-display" class="hidden-hint"></p> 
             </div>
+        </div>
+
+        <div id="scrambled-letters-area"></div>
 
         <div id="guess-area">
-            <input type="text" id="user-guess" placeholder="Tulis tebakanmu...">
+            <input type="text" id="user-guess" placeholder="Tulis tebakanmu..."> 
             <button id="submit-button">Tebak</button>
         </div>
 
         <p id="message-area"></p>
-
-        <div id="keyboard-container">
-        </div>
+        
+        <div id="keyboard-container"></div>
     </main>
 
-    <script src="js/data.js"></script>
+    <!-- PENTING: data.js HARUS dimuat duluan sebelum script.js -->
+    <script src="js/data.js"></script> 
     <script src="js/script.js"></script>
 </body>
 </html>
