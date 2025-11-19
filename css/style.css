@@ -1,7 +1,6 @@
-/* Import font cerah dari Google Fonts */
+/* Import font */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;900&display=swap');
 
-/* Definisikan Warna dan Ukuran Dasar */
 :root {
     font-size: 18px; 
     --primary-blue: #457b9d; 
@@ -10,8 +9,6 @@
     --bright-red: #e63946; 
     --white-bg: #f1faee;
     --accent-orange: #ff9f1c;
-
-    /* Warna KHUSUS UNTUK INTRO SCREEN (Desain Gambar User) */
     --intro-bg-blue: #46718a; 
     --intro-text-color: #ffffff;
     --progress-bar-color: #e63946;
@@ -22,269 +19,121 @@ body {
     font-family: 'Poppins', sans-serif;
     background: linear-gradient(135deg, var(--light-blue) 0%, var(--primary-blue) 100%);
     color: var(--dark-text);
-    margin: 0;
-    padding: 0; /* Hapus padding body */
-    /* Perbaikan "Gak Ngescroll": Kunci body ke tinggi viewport */
-    height: 100vh; /* Fallback */
-    height: 100svh; /* Gunakan Small Viewport Height untuk HP */
-    overflow: hidden; /* Cegah body scrolling */
+    margin: 0; padding: 0;
+    height: 100vh; height: 100svh;
+    overflow: hidden; 
 }
+.hidden { display: none !important; }
 
-/* Utilitas */
-.hidden {
-    display: none !important;
-}
-
-/* CONTAINER UMUM (Mobile-first) */
 .screen-container {
     background-color: var(--white-bg);
     padding: 20px;
-    border-radius: 0; 
-    box-shadow: none; 
-    width: 100%; 
-    text-align: center;
-    box-sizing: border-box; /* Sangat penting untuk padding */
-    margin-top: 0; 
-    /* Perbaikan "Gak Ngescroll": Container mengisi 100% body */
-    height: 100%;
-    /* Izinkan scrolling DI DALAM container jika konten terlalu panjang (misal: game) */
+    width: 100%; height: 100%;
+    box-sizing: border-box;
     overflow-y: auto; 
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Konten di tengah secara vertikal */
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start; 
 }
 
-/* --- MEDIA QUERY: LAYAR BESAR (PC/LAPTOP) --- */
+/* MEDIA QUERY: LAYAR BESAR (PC/LAPTOP) */
 @media (min-width: 768px) {
-    body {
-        justify-content: center;
-        padding: 20px; /* Beri padding lagi untuk body di PC */
-        height: auto; /* Kembalikan ke auto */
-        min-height: 100vh;
-        overflow: auto; /* Izinkan body scroll di PC */
-    }
-
+    body { justify-content: center; padding: 20px; overflow: auto; }
     .screen-container {
-        max-width: 550px; 
-        width: 90%; 
-        border-radius: 20px; 
+        max-width: 550px; width: 90%; border-radius: 20px; 
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); 
-        margin-top: 0; 
-        height: auto; /* Tinggi otomatis di PC */
-        min-height: auto;
-        overflow-y: visible; /* Tidak perlu internal scroll di PC */
-        justify-content: flex-start;
+        height: auto; min-height: auto; margin: 20px auto;
     }
 }
 
-
-/* --- 1. INTRO SCREEN STYLE --- */
+/* Style Intro dll (dipercepat) */
 #intro-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh; /* Selalu full screen */
-    height: 100svh;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
     background-color: var(--intro-bg-blue);
-    background-image: radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 40%),
-                      radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 30%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: var(--intro-text-color);
-    box-shadow: none;
-    z-index: 100;
-    padding: 20px;
-    box-sizing: border-box;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    color: var(--intro-text-color); z-index: 100;
 }
+#intro-title { font-size: 4em; margin-bottom: 20px; text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000; }
+.loading-symbol { width: 150px; height: 15px; background: rgba(255,255,255,0.3); border-radius: 10px; }
+.progress-fill { height: 100%; width: 0%; background: var(--progress-bar-color); transition: width 6s linear; border-radius: 10px; }
 
-#intro-title {
-    font-family: 'Poppins', sans-serif;
-    font-size: 5em; 
-    font-weight: 900; 
-    color: var(--intro-text-color);
-    text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
-    opacity: 0;
-    animation: fadeIn 1s ease-in forwards;
-    animation-delay: 0.5s;
-    margin-bottom: 50px;
-    /* Perbaikan 1: Pastikan text-align center */
-    text-align: center;
-    width: 100%;
+/* Style Tombol Umum */
+button {
+    padding: 10px 20px; background-color: var(--bright-red); color: white;
+    border: none; border-radius: 8px; cursor: pointer; font-weight: 700; margin-top: 10px;
 }
-@media (max-width: 480px) {
-    #intro-title {
-        font-size: 3.5em; 
-    }
-}
+button:hover { opacity: 0.9; }
 
-/* Progress Bar */
-.loading-symbol {
-    width: 80%; 
-    max-width: 400px;
-    height: 20px;
-    background-color: rgba(255, 255, 255, 0.3);
-    border-radius: 10px;
-    margin: 20px auto;
-    overflow: hidden;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-}
-
-.progress-fill {
-    height: 100%;
-    width: 0%; 
-    background-color: var(--progress-bar-color); 
-    transition: width 7s linear; 
-    border-radius: 10px;
-}
-
-#intro-container p {
-    font-size: 1.2em;
-    font-weight: 600;
-    color: var(--intro-text-color);
-    margin-top: 5px;
-}
-
-/* --- Animasi --- */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* --- 2. DESKRIPSI & PETUNJUK BOX STYLE --- */
+/* Style Deskripsi dan Petunjuk (GLOW EFFECT) */
 .description-box {
-    background-color: var(--light-blue);
-    border: 2px solid var(--primary-blue);
-    padding: 20px;
-    margin: 20px 0;
-    border-radius: 10px;
-    text-align: left;
-    color: var(--dark-text);
+    background-color: var(--light-blue); border: 2px solid var(--primary-blue);
+    padding: 20px; margin: 20px 0; border-radius: 10px; text-align: left; color: var(--dark-text);
+    /* Efek Bersinar */
+    box-shadow: 0 0 10px rgba(69, 123, 157, 0.5), 0 0 20px rgba(69, 123, 157, 0.3);
 }
-/* ... (style .rules-box tetap sama) ... */
-.rules-box ul { list-style: none; padding: 0; }
-.rules-box li { margin-bottom: 10px; position: relative; padding-left: 25px; font-size: 0.9em; }
-.rules-box li::before { content: "💡"; position: absolute; left: 0; color: var(--bright-red); }
 
-
-/* Style Tombol Lanjut/Mulai */
-#next-to-rules-button, #start-setup-button, #start-game-button {
-    padding: 12px 30px;
-    background-color: var(--bright-red);
-    color: var(--white-bg);
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1.1em;
-    font-weight: 700;
-    margin-top: 15px;
-    transition: background-color 0.3s;
-}
-#next-to-rules-button:hover, #start-setup-button:hover, #start-game-button:hover { background-color: #c9303c; }
-
-
-/* --- 4. SETUP GAME STYLE --- */
-#setup-container h2 { color: var(--primary-blue); font-size: 1.5em; margin-bottom: 25px; }
-.setting-group { margin: 15px 0; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-.setting-group label { font-weight: 600; color: var(--dark-text); font-size: 0.9em; text-align: center; }
-#category-select,
-#num-questions {
-    padding: 10px 15px;
-    border: 2px solid var(--primary-blue);
-    border-radius: 8px;
-    font-size: 1em;
-    width: 80%;
-    max-width: 300px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
-    appearance: none;
-    background-color: var(--white-bg);
-    cursor: pointer;
-    transition: border-color 0.2s;
+/* --- STYLE UNTUK GAME CONTAINER --- */
+#game-container header.text-center {
+    width: 100%;
     text-align: center;
 }
-#category-select:focus,
-#num-questions:focus { border-color: var(--bright-red); outline: none; }
-#category-select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%23457b9d' d='M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    padding-right: 30px;
-}
 
-
-/* --- 5. GAME UTAMA (MAIN) STYLE --- */
-#game-container {
-    /* Perbaikan "Gak Ngescroll": Buat game-container bisa scroll internal jika perlu */
-    justify-content: flex-start; /* Mulai dari atas */
-}
-
-/* ... (style #info-area, #hint-wrapper, #scrambled-letters-area, dll. tetap sama) ... */
-#info-area h2 {color: #007bff;}
-#hint-wrapper {display: flex; flex-direction: column; align-items: center;}
-#show-hint-button {padding: 10px 20px; background-color: var(--accent-orange); color: var(--dark-text); border: none; border-radius: 8px; cursor: pointer; font-weight: 700; transition: background-color 0.3s; margin-top: 15px;}
-#show-hint-button:hover {background-color: #e67e22;}
-.hidden-hint {display: none !important; padding: 10px;}
-#hint-display {background-color: #ffe8d6; border-left: 5px solid #ff7f50; padding: 10px; border-radius: 5px; font-style: italic; font-size: 0.9em; margin-top: 10px; width: 80%;}
-#scrambled-letters-area {margin: 30px 0; font-size: 2.5em; padding: 15px; border: 3px dashed var(--primary-blue); border-radius: 10px; background-color: var(--light-blue); color: var(--dark-text); font-weight: 700; letter-spacing: 7px; box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);}
-#guess-area {display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;}
-#user-guess { padding: 12px; border: 2px solid var(--primary-blue); border-radius: 8px; flex-grow: 1; font-size: 1.2em; text-align: center; max-width: 65%; }
-#submit-button {padding: 12px 25px; background-color: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1em; font-weight: 700; transition: background-color 0.3s, transform 0.1s;}
-#submit-button:hover {background-color: #218838; transform: translateY(-2px);}
-#message-area {margin-top: 10px; padding: 10px; font-size: 1.2em; font-weight: 700; border-radius: 5px; min-height: 40px;}
-
-
-/* --- Perbaikan 2: Keyboard QWERTY & Ukuran --- */
-#keyboard-container {
-    margin-top: 15px; 
-    display: flex; 
-    flex-direction: column; /* Tumpuk baris keyboard */
-    align-items: center; /* Pusatkan baris keyboard */
-    gap: 5px; 
-    user-select: none;
-    padding: 0 5px; /* Beri sedikit padding di sisi keyboard */
+#info-area {
     width: 100%;
+    max-width: 400px;
+    padding: 0 10px;
     box-sizing: border-box;
+    text-align: center; /* Memastikan semua info di tengah */
+}
+#info-area h2 {color: #007bff; text-align: center;} /* Pemusatan Teks H2 */
+
+/* Style untuk Nyawa (Hati) */
+#lives-display {
+    font-size: 1.5em;
+    margin: 10px 0;
+    letter-spacing: 5px;
+    text-align: center;
 }
 
-/* Baris QWERTY (BARU) */
-.keyboard-row {
+#hint-wrapper {display: flex; flex-direction: column; align-items: center; width: 100%;}
+#show-hint-button {padding: 10px 20px; background-color: var(--accent-orange); color: var(--dark-text); border: none; border-radius: 8px; cursor: pointer; font-weight: 700; margin-top: 15px;}
+.hidden-hint {display: none !important; padding: 10px;}
+#hint-display {background-color: #ffe8d6; border-left: 5px solid #ff7f50; padding: 10px; border-radius: 5px; font-style: italic; font-size: 0.9em; margin-top: 10px; width: 80%; text-align: center;}
+
+/* Scrambled Letters */
+#scrambled-letters-area {
+    margin: 30px 0; font-size: 2.5em; padding: 15px; border: 3px dashed var(--primary-blue); border-radius: 10px; 
+    background-color: var(--light-blue); color: var(--dark-text); font-weight: 700; letter-spacing: 7px; 
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1); width: 80%; max-width: 450px; text-align: center; /* Pemusatan Teks */
+}
+
+
+/* --- STYLE UNTUK KOTAK HURUF --- */
+#letter-boxes-container {
     display: flex;
     justify-content: center;
     gap: 5px;
-    width: 100%; /* Baris mengambil lebar penuh */
+    margin: 20px 0;
+    flex-wrap: wrap;
 }
 
+.letter-box {
+    width: 45px; height: 55px;
+    background-color: white;
+    border: 2px solid var(--primary-blue);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5em; font-weight: bold; color: var(--dark-text);
+}
+
+#guess-area { display: flex; gap: 10px; margin-bottom: 10px; width: 100%; justify-content: center; }
+#guess-area button { flex: 1; max-width: 150px; }
+
+/* Keyboard */
+#keyboard-container {
+    margin-top: 10px; display: flex; flex-direction: column; gap: 5px; width: 100%; max-width: 500px;
+}
+.keyboard-row { display: flex; justify-content: center; gap: 3px; width: 100%; }
 .key-button {
-    background-color: var(--dark-text);
-    color: var(--white-bg);
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: 700;
-    transition: background-color 0.1s;
-    
-    /* Perbaikan 2: Ukuran tombol lebih besar */
-    font-size: 1.1em; /* Font lebih besar */
-    padding: 15px 0; /* Tombol lebih TINGGI */
-    
-    /* Biarkan flexbox mengatur lebar tombol */
-    flex-grow: 1; 
-    flex-basis: 0; /* Mulai dari 0 */
-    min-width: 0; /* Biarkan tombol menyusut */
+    flex: 1; padding: 12px 0; background: var(--dark-text); color: white;
+    border-radius: 4px; border: none; font-weight: bold;
 }
-
-.key-button:hover {
-    background-color: var(--primary-blue);
-}
-
-.key-button.function-key {
-    background-color: var(--bright-red);
-    /* Buat tombol HAPUS sedikit lebih lebar */
-    flex-grow: 2; 
-}
-
-.key-button.function-key:hover {
-    background-color: #c9303c;
-}
+.key-button.function-key { flex: 1.5; background-color: var(--bright-red); }
