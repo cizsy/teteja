@@ -74,16 +74,33 @@ function createLetterBoxes(wordLength) {
     }
 }
 
+function validateQuestionInput(value) {
+    const num = parseInt(value);
+    
+    if (isNaN(num) || num < 5 || num % 5 !== 0) {
+        return false;
+    }
+    return true;
+}
+
+function shuffleArray(array) {
+    // Implementasi algoritma Fisher-Yates shuffle
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
 function updateBoxesUI() {
     const boxes = letterBoxesContainer.children;
     for (let i = 0; i < boxes.length; i++) {
         boxes[i].textContent = currentGuessArray[i];
         boxes[i].classList.remove('active');
     }
+    
     if (currentLetterIndex < boxes.length) {
-         boxes[currentLetterIndex].classList.add('active');
-    } else if (boxes.length > 0) {
-        boxes[boxes.length - 1].classList.add('active');
+        boxes[currentLetterIndex].classList.add('active');
     }
 }
 
@@ -92,9 +109,7 @@ function handleInput(key) {
 
     if (key === 'BACKSPACE' || key === 'DELETE') {
         if (currentLetterIndex > 0) {
-            if (currentGuessArray[currentLetterIndex] === '') {
-                 currentLetterIndex--;
-            }
+            currentLetterIndex--; 
             currentGuessArray[currentLetterIndex] = '';
             updateBoxesUI();
         }
@@ -185,6 +200,12 @@ function startGame(words = null) {
         const selectedCategory = categorySelect.value;
         const requestedQuestions = parseInt(numQuestionsInput.value);
         
+        // **[PERBAIKAN 1: Validasi Input]**
+        if (!validateQuestionInput(requestedQuestions)) {
+            alert("Jumlah pertanyaan harus kelipatan 5 dan minimal 5!");
+            return; // Hentikan game jika validasi gagal
+        }
+        
         // Cek data kosakata global (PENTING)
         if (typeof KOSA_KATA_GAME === 'undefined' || !KOSA_KATA_GAME[selectedCategory]) {
             alert("Error: Data kosakata (KOSA_KATA_GAME) tidak ditemukan. Pastikan file data.js dimuat."); 
@@ -192,14 +213,14 @@ function startGame(words = null) {
         }
         
         let pool = [...KOSA_KATA_GAME[selectedCategory]];
-        availableWords = [];
-        const count = Math.min(requestedQuestions, pool.length);
         
-        for (let i = 0; i < count; i++) {
-            const randIndex = Math.floor(Math.random() * pool.length);
-            availableWords.push(pool[randIndex]);
-            pool.splice(randIndex, 1);
-        }
+        // **[PERBAIKAN 2: Sistem Acak yang Lebih Baik]**
+        // 1. Acak seluruh pool
+        pool = shuffleArray(pool); 
+
+        // 2. Ambil sejumlah kata yang diminta dari awal array yang sudah diacak
+        const count = Math.min(requestedQuestions, pool.length);
+        availableWords = pool.slice(0, count); 
 
         totalQuestions = count;
         initialWordsCount = count; // Simpan total kata awal
@@ -217,6 +238,7 @@ function startGame(words = null) {
     showScreen(gameContainer);
     loadRound();
 }
+
 
 function loadRound() {
     if (availableWords.length === 0) {
