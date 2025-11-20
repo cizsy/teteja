@@ -58,12 +58,20 @@
         <button id="start-game-button">Mulai Permainan</button>
     </div>
 
-
     <!-- main / utama -->
     <main id="game-container" class="screen-container hidden"> 
+        <header class="text-center">
+            <h1>TETEJA</h1>
+            <p>Tembang Tembung Krama Jawa</p>
+        </header>
+
         <div id="info-area">
             <h2 id="round-display">Putaran 1</h2>
             <div id="lives-display">❤️❤️❤️❤️❤️</div>
+            <div id="hint-wrapper">
+                <button id="show-hint-button">❓Klik untuk melihat petunjuk </button>
+                <p id="hint-display" class="hidden-hint"></p> 
+            </div>
         </div>
 
         <div id="scrambled-letters-area"></div>
@@ -75,11 +83,6 @@
             <button id="skip-button" class="function-button" style="background-color: #ff9f1c; color: #1d3557;">Lewati</button>
             <button id="submit-button">Tebak</button>
         </div>
-
-        <div id="hint-wrapper">
-                <button id="show-hint-button">❓Klik untuk melihat petunjuk </button>
-                <p id="hint-display" class="hidden-hint"></p> 
-            </div>
 
         <p id="message-area"></p>
         
